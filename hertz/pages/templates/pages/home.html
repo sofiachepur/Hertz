@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<main>
+    <section class="head_page">
+    <img src="{% static 'img/right.png' %}" alt="Фото" class="head_page_img">
+    <img src="{% static 'img/logo.png' %}" alt="Фото" class="logo">
+    <img src="{% static 'img/left.png' %}" alt="Фото" class="head_page_img1">
+    </section>
+    <section class="content">
+        <div class="head_page_content">
+        <h2>ПРО ПРОЄКТ</h2>
+        <h3>Народне мистецтво, що живе поруч</h3>
+        <div class="content_text">
+        <p>
+            Ласкаво просимо до простору, де традиція поєднується з сучасним життям.
+            Тут зібрані вироби українських майстрів, створені з любов’ю, терпінням і глибокою
+            повагою до народної культури.
+
+        Кожна річ має свій характер і настрій — у текстурі дерева,
+            візерунках тканини, теплі глини чи тонкому плетінні. Це не просто речі,
+            а історії, що продовжують жити у вашому домі.
+
+        Ми віримо, що справжня краса — у природності, ручній праці та речах,
+            які мають зміст. Обираючи народні вироби, ви підтримуєте майстрів і
+            допомагаєте традиціям жити далі — не в музеях, а в щоденному житті.
+        </p>
+            </div>
+        <div class="button">
+         <a href="/rizdvo/" class="buy">КУПИТИ</a>
+        </div>
+        </div>
+
+        <div class="slider-wrapper">
+    <div class="slider">
+        <img src="{% static 'img/slider_photo1.png' %}">
+        <img src="{% static 'img/slider_photo2.png' %}">
+        <img src="{% static 'img/slider_photo3.png' %}">
+        <img src="{% static 'img/slider_photo4.png' %}">
+        <img src="{% static 'img/slider_photo5.png' %}">
+    </div>
+            <h2>Для чого цей сервіс?</h2>
+            <h3>Простір, створений із любові до традицій</h3>
+            <div class="content_text">
+                <p>
+                    Цей проєкт народився з бажання зберегти й показати красу українських
+                    народних промислів у сучасному світі.
+                    Ми об’єднуємо майстрів, які працюють у традиційних техніках, і людей, що цінують речі
+                    з душею та історією.
+                    Для нас важливо не лише продавати вироби, а й розповідати про культуру, символи та сенси,
+                    які вони несуть. Кожен предмет — це
+                    частинка спадщини, переосмислена для сьогоднішнього дому.
+                    Ми прагнемо, щоб народне мистецтво залишалося живим: щоб ним користувалися, його дарували,
+                    передавали далі. Бо традиції
+                    живуть доти, доки вони є частиною повсякденного життя.
+                </p>
+            </div>
+            </div>
+     <div class="photo_gallery">
+
+  <div class="photo-wrap">
+    <img src="{% static 'img/photo_gallery_photo1.png' %}" alt="">
+    <div class="photo-overlay"><span>Село Єлисаветівка, Дніпропетровська округа</span>
+    </div>
+  </div>
+
+  <div class="photo-wrap">
+    <img src="{% static 'img/photo_gallery_photo2.png' %}" alt="">
+    <div class="photo-overlay"><span>Петриківський розпис</span></div>
+  </div>
+
+  <div class="photo-wrap">
+    <img src="{% static 'img/photo_gallery_photo3.png' %}" alt="">
+    <div class="photo-overlay"><span>Виготовлення різдвяного павука</span></div>
+  </div>
+
+  <div class="photo-wrap">
+    <img src="{% static 'img/photo_gallery_photo4.png' %}" alt="">
+    <div class="photo-overlay"><span>Вертепування</span></div>
+  </div>
+
+  <div class="photo-wrap">
+    <img src="{% static 'img/photo_gallery_photo5.png' %}" alt="">
+    <div class="photo-overlay"><span>Свято Івана Купала</span></div>
+  </div>
+
+  <div class="photo-wrap">
+    <img src="{% static 'img/photo_gallery_photo6.png' %}" alt="">
+    <div class="photo-overlay"><span>Великдень у селищі Ясіня на Рахівщині, 1926р.</span></div>
+  </div>
+
+</div>
+        <div class="form">
+  <h2>Доєднуйтесь до спільноти.</h2>
+  <form method="post">
+
+    <div class="email-row">
+      <input type="email" placeholder="Ваш e-mail">
+      <span class="arrow"></span>
+    </div>
+
+    <label>
+      <span class="label-text">
+        Підписуючись на розсилку, ви погоджуєтесь з умовами
+        <strong>політики конфіденційності</strong>
+      </span>
+      <input type="checkbox" id="scales" name="scales" />
+    </label>
+
+    <p>
+      Ми цінуємо вашу персональну інформацію, тому використовуємо файли
+      cookie та інші інструменти, для того, аби здійснювати маркетингову діяльність.
+    </p>
+
+  </form>
+</div>
+    </section>
+
+</main>
+
+{% endblock %}

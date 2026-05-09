@@ -1,0 +1,12 @@
+<h1>Оформлення замовлення</h1>
+
+{% for id, qty in cart.items %}
+    <p>Товар {{ id }} × {{ qty }}</p>
+{% endfor %}
+
+<form>
+    <input placeholder="Ім’я для доставки">
+    <input placeholder="Телефон">
+    <input placeholder="Адреса (для подарунка теж можна)">
+    <button>Замовити</button>
+</form>
