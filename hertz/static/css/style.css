@@ -323,7 +323,7 @@
 }
 
 .email-row input {
-  width: 100%;
+  width: 50%;
   border: none;
   outline: none;
   background: transparent;
@@ -343,14 +343,13 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 18px;
+    width: 50px;
   color: #111;
-  pointer-events: none;
+    background-color: white;
+    border: none;
   font-style: normal;
 }
 
-.email-row .arrow::after {
-  content: '→';
-}
 
 .form form label {
   display: flex;

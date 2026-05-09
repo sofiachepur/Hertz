@@ -1,0 +1,7 @@
+{% for product in products %}
+  <div class="product-card">
+    <img src="{{ product.image.url }}" alt="">
+    <h3>{{ product.title }}</h3>
+    <p>{{ product.price }} грн</p>
+  </div>
+{% endfor %}

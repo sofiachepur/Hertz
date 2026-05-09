@@ -2,4 +2,31 @@
 
 {% block content %}
 <h1>Це сторінка: {{ title }}</h1>
+
+{% for product in products %}
+
+<div class="product-card">
+
+  <h2>{{ product.title }}</h2>
+
+  <div class="images">
+    <img src="{{ product.image1.url }}">
+    {% if product.image2 %}<img src="{{ product.image2.url }}">{% endif %}
+    {% if product.image3 %}<img src="{{ product.image3.url }}">{% endif %}
+    {% if product.image4 %}<img src="{{ product.image4.url }}">{% endif %}
+    {% if product.image5 %}<img src="{{ product.image5.url }}">{% endif %}
+  </div>
+
+  <p><b>Ціна:</b> {{ product.price }} грн</p>
+
+  <p><b>Про товар:</b> {{ product.description }}</p>
+
+  <p><b>Характеристики:</b> {{ product.characteristics }}</p>
+
+  <p><b>Догляд:</b> {{ product.care }}</p>
+
+</div>
+
+{% endfor %}
+
 {% endblock %}

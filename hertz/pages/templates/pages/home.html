@@ -95,11 +95,13 @@
 </div>
         <div class="form">
   <h2>Доєднуйтесь до спільноти.</h2>
-  <form method="post">
+
+  <form method="post" action="{% url 'subscribe' %}">
+    {% csrf_token %}
 
     <div class="email-row">
-      <input type="email" placeholder="Ваш e-mail">
-      <span class="arrow"></span>
+      <input type="email" name="email" placeholder="Ваш e-mail">
+      <button type="submit" class=" arrow" >→</button>
     </div>
 
     <label>
@@ -107,12 +109,13 @@
         Підписуючись на розсилку, ви погоджуєтесь з умовами
         <strong>політики конфіденційності</strong>
       </span>
-      <input type="checkbox" id="scales" name="scales" />
+
+      <input type="checkbox" name="agree" required />
     </label>
 
     <p>
       Ми цінуємо вашу персональну інформацію, тому використовуємо файли
-      cookie та інші інструменти, для того, аби здійснювати маркетингову діяльність.
+      cookie та інші інструменти.
     </p>
 
   </form>
