@@ -1,0 +1,58 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="cart-wrapper">
+
+  <div class="cart-header">
+    <h1 class="cart-title">Товари</h1>
+    <hr class="cart-divider">
+  </div>
+
+  <div class="cart-list">
+    {% for product in products %}
+    <div class="cart-item">
+      <div class="cart-item-img">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.title }}">
+        {% endif %}
+      </div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">{{ product.title }}</div>
+        <div class="cart-item-price">{{ product.total_price }} грн</div>
+        <div class="cart-item-qty">Кількість: {{ product.cart_quantity }}</div>
+        <div class="cart-item-actions">
+          <a href="{% url 'increase_quantity' product.id %}" class="btn-add">Додати</a>
+          <a href="{% url 'remove_from_cart' product.id %}" class="btn-remove">Видалити</a>
+        </div>
+      </div>
+    </div>
+    <hr class="cart-divider">
+    {% endfor %}
+  </div>
+
+  <div class="cart-summary">
+    <span class="summary-label">Підсумок:</span>
+    <span class="summary-price">
+   {{ total }} грн
+</span>
+  </div>
+  <hr class="cart-divider">
+
+  <div class="cart-footer">
+    <a href="{% url 'home' %}" class="btn-continue">Продовжити покупки</a>
+{% if products %}
+    <a href="{% url 'checkout' %}" class="btn-checkout">Оформити замовлення</a>
+{% else %}
+    <span class="btn-checkout btn-checkout--disabled">Оформити замовлення</span>
+{% endif %}  </div>
+
+</div>
+
+
+{% endblock %}
+
+
+

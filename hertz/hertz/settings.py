@@ -22,10 +22,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-wv*sk^sk*!3+nkfj)0-a#b9pkcuf^(9xw24uo(o%ls20gx^o%#'
 
+LIQPAY_PUBLIC_KEY  = 'sandbox_i46947698415'
+LIQPAY_PRIVATE_KEY = 'sandbox_0HHrHOFXUafmKOJAseJTchYqHqfbQzL4uCCJpn87'
+
+# Gmail
+EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST          = 'smtp.gmail.com'
+EMAIL_PORT          = 587
+EMAIL_USE_TLS       = True
+EMAIL_HOST_USER     = 'chepursofia27@gmail.com'
+EMAIL_HOST_PASSWORD = 'tyle yivt yvtc blzq'  # не звичайний пароль!
+DEFAULT_FROM_EMAIL  = 'Герць <hertz@gmail.com>'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition

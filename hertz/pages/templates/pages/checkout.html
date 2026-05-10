@@ -1,12 +1,861 @@
-<h1>Оформлення замовлення</h1>
+{% extends 'base.html' %}
 
-{% for id, qty in cart.items %}
-    <p>Товар {{ id }} × {{ qty }}</p>
-{% endfor %}
+{% block content %}
 
-<form>
-    <input placeholder="Ім’я для доставки">
-    <input placeholder="Телефон">
-    <input placeholder="Адреса (для подарунка теж можна)">
-    <button>Замовити</button>
+<form method="post" id="checkoutForm">
+{% csrf_token %}
+
+<div class="checkout-wrapper">
+
+<h1 class="page-title">
+    Заповніть, будь ласка, контактну форму
+</h1>
+
+<!-- TABS -->
+<div class="tabs">
+
+  <button type="button" class="tab active" data-tab="self">
+      Я отримувач
+  </button>
+
+  <button type="button" class="tab" data-tab="other">
+      Інший отримувач
+  </button>
+
+</div>
+
+<div class="checkout-layout">
+
+<!-- LEFT -->
+<div class="left-col">
+
+    <!-- SELF -->
+    <div class="tab-panel active" id="panel-self">
+
+        <section>
+
+            <h2 class="section-title">Ваша контактна інформація</h2>
+
+            <div class="input-grid-2">
+
+                <input type="text"
+                       name="customer_name"
+                       placeholder="Ваше ім'я"
+                       required>
+
+                <input type="email"
+                       name="customer_email"
+                       placeholder="E-mail">
+
+            </div>
+
+            <div class="input-grid-2">
+
+                <input type="tel"
+                       name="customer_phone"
+                       placeholder="Номер телефону"
+                       required>
+
+                <input type="text"
+                       name="customer_address"
+                       placeholder="Адреса"
+                       required>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- OTHER -->
+    <div class="tab-panel" id="panel-other">
+
+        <section>
+
+            <h2 class="section-title">
+                Контактна інформація отримувача
+            </h2>
+
+            <div class="input-grid-2">
+
+                <input type="text"
+                       name="receiver_name"
+                       placeholder="Ім'я отримувача">
+
+                <input type="tel"
+                       name="receiver_phone"
+                       placeholder="Телефон отримувача">
+
+            </div>
+
+        </section>
+
+        <section>
+
+            <h2 class="section-title">
+                Ваша контактна інформація
+            </h2>
+
+            <div class="input-grid-2">
+
+                <input type="text"
+                       name="customer_name"
+                       placeholder="Ваше ім'я">
+
+                <input type="email"
+                       name="customer_email"
+                       placeholder="E-mail">
+
+            </div>
+
+            <div class="input-grid-2">
+
+                <input type="tel"
+                       name="customer_phone"
+                       placeholder="Номер телефону">
+
+                <input type="text"
+                       name="customer_address"
+                       placeholder="Адреса">
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- DELIVERY -->
+<section>
+    <h2 class="section-title">Спосіб доставки</h2>
+
+    <div class="radio-group">
+
+        <label class="radio-option">
+            <input type="radio" name="delivery" value="Нова Пошта" id="delivery-np" checked>
+            <span class="radio-label">Нова Пошта</span>
+        </label>
+
+        <label class="radio-option">
+            <input type="radio" name="delivery" value="Укрпошта" id="delivery-up">
+            <span class="radio-label">Укрпошта</span>
+        </label>
+
+    </div>
+
+    <div class="input-grid-2" id="delivery-fields">
+        <input type="text" name="delivery_city" placeholder="Місто" required>
+        <input type="text" name="delivery_branch" placeholder="Відділення (№ або адреса)" required>
+    </div>
+
+</section>
+
+    <!-- PAYMENT -->
+    <section>
+        <h2 class="section-title">Спосіб оплати</h2>
+
+        <div class="radio-group">
+
+            <label class="radio-option">
+                <input type="radio" name="payment" value="Накладний платіж" checked>
+                <span class="radio-label">Накладний платіж</span>
+            </label>
+
+            <label class="radio-option" id="payment-card-label">
+                <input type="radio" name="payment" value="Оплата картою" id="payment-card">
+                <span class="radio-label">Оплата картою</span>
+            </label>
+
+        </div>
+    </section>
+
+    <!-- COMMENT -->
+    <section class="comment-section">
+        <h2 class="section-title">Коментар до замовлення</h2>
+        <textarea name="comment"></textarea>
+    </section>
+
+    <!-- CONFIRM -->
+    <section class="confirm-section">
+
+        <label class="checkbox-row">
+            <input type="checkbox" required>
+            Я даю згоду на обробку персональних даних
+        </label>
+
+    </section>
+
+</div>
+
+<!-- RIGHT -->
+<div class="order-summary">
+
+    <div>
+
+        <h2 class="section-title left">Ваше замовлення</h2>
+
+        <div class="order-card">
+
+            {% for product in products %}
+
+            <div class="order-item">
+
+                <div class="order-item-img">
+                    <img src="{{ product.image1.url }}" alt="">
+                </div>
+
+                <div class="order-item-info">
+
+                    <div class="order-item-name">
+                        {{ product.title }}
+                    </div>
+
+                    <div class="order-item-qty">
+                        {{ product.cart_quantity }} шт
+                    </div>
+
+                    <div class="order-item-price">
+                        {{ product.total_price }} грн
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <div class="details-card">
+
+        <div class="details-title">Деталі замовлення</div>
+
+        {% for product in products %}
+        <div class="price-row">
+            <span>{{ product.cart_quantity }} × {{ product.title }}</span>
+            <span>{{ product.total_price }} грн</span>
+        </div>
+        {% endfor %}
+
+        <div class="price-row total">
+            <span>Загальна вартість:</span>
+            <span>{{ total }} грн</span>
+        </div>
+
+        <button type="button" class="btn-pay" id="btnConfirm">
+            Підтвердити замовлення
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+</div>
+
 </form>
+
+
+<div id="successPopup" class="success-popup-overlay hidden">
+    <div class="success-popup">
+
+        <button class="popup-close" onclick="closePopup()">×</button>
+
+        <h2 class="popup-title">Дякую за ваше замовлення</h2>
+
+        <p class="popup-subtitle">
+            Очікуйте повідомлення про статус<br>вашого замовлення
+        </p>
+
+        <p class="popup-greeting">Гарного дня, команда Герць</p>
+
+        <div class="popup-logo">ГЕРЦЬ</div>
+
+    </div>
+</div>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+
+/* ── RESET & VARIABLES ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f4f0;
+  --white: #ffffff;
+  --text: #111110;
+  --muted: #888884;
+  --border: #d8d8d4;
+  --accent: #111110;
+  --font: 'Manrope', sans-serif;
+}
+
+/* ── PAGE ── */
+.page-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  letter-spacing: 0.01em;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+
+.tab {
+  padding: 10px 28px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: #e8e8e4;
+  color: var(--muted);
+  transition: background 0.2s, color 0.2s;
+}
+
+.tab:first-child { border-radius: 4px 0 0 4px; border-right: none; }
+.tab:nth-child(2) { border-radius: 0 4px 4px 0; }
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* ── TAB PANELS ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── LAYOUT ── */
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ── SECTION TITLES ── */
+.section-title {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* ── INPUTS ── */
+.input-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea {
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input::placeholder, textarea::placeholder { color: var(--muted); }
+input:focus, textarea:focus { border-color: #999; }
+
+/* ── RADIO ── */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.radio-option input[type="radio"]:checked {
+  border: 4px solid var(--accent);
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ── COMMENT ── */
+.comment-section { margin-bottom: 24px; }
+textarea { resize: none; height: 70px; }
+
+/* ── CONFIRM ── */
+.confirm-section { margin-bottom: 8px; }
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.checkbox-row input[type="checkbox"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.checkbox-row input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ── RIGHT COLUMN ── */
+.order-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px;
+}
+
+.order-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.order-item-img {
+  width: 56px;
+  height: 56px;
+  background: #e8e8e4;
+  border-radius: 3px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.order-item-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.order-item-info { font-size: 13px; }
+.order-item-name { font-weight: 500; margin-bottom: 4px; }
+.order-item-qty { color: var(--muted); font-size: 12px; }
+
+/* ── DETAILS CARD ── */
+.details-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px;
+}
+
+.details-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+.price-row.total {
+  color: var(--text);
+  font-weight: 600;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-pay {
+  width: 100%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 13px;
+  font-size: 14px;
+  font-family: var(--font);
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: opacity 0.2s;
+}
+
+.btn-pay:hover { opacity: 0.82; }
+
+.left-col section { margin-bottom: 24px; }
+
+/* ══════════════════════════════════════════
+   CARD PAYMENT POPUP
+══════════════════════════════════════════ */
+.card-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.card-overlay.hidden { display: none; }
+
+.card-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 340px;
+  padding: 24px 22px 20px;
+  font-family: var(--font);
+}
+
+.card-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #555;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.card-header-shop {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.card-header-amount {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+}
+
+.card-gpay-btn {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  font-family: var(--font);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.card-divider {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.card-divider::before,
+.card-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 42%;
+  height: 1px;
+  background: #e8e8e4;
+}
+
+.card-divider::before { left: 0; }
+.card-divider::after { right: 0; }
+
+/* card inner tabs */
+.card-tabs {
+  display: flex;
+  border: 1px solid #e0e0dc;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.card-tab {
+  flex: 1;
+  padding: 8px 4px;
+  font-size: 12px;
+  font-family: var(--font);
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #888;
+  border-right: 1px solid #e0e0dc;
+}
+
+.card-tab:last-child { border-right: none; }
+
+.card-tab.active {
+  background: #f0f0ec;
+  color: #111;
+}
+
+/* panels */
+.card-panel { display: none; }
+.card-panel.active { display: block; }
+
+/* fields */
+.card-field {
+  margin-bottom: 10px;
+}
+
+.card-field label {
+  font-size: 11px;
+  color: #888;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.card-field input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: var(--font);
+  color: #111;
+  outline: none;
+  background: #fff;
+}
+
+.card-field input:focus { border-color: #999; }
+
+.card-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.card-privat-hint {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.card-submit {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 13px;
+  font-size: 14px;
+  font-family: var(--font);
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: opacity 0.2s;
+}
+
+.card-submit:hover { opacity: 0.82; }
+
+.card-note {
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.card-note a { color: #555; }
+
+.card-badges {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.card-badge {
+  font-size: 10px;
+  color: #aaa;
+  border: 1px solid #e0e0dc;
+  border-radius: 3px;
+  padding: 3px 7px;
+}
+
+/* ══════════════════════════════════════════
+   SUCCESS POPUP
+══════════════════════════════════════════ */
+.success-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.success-popup {
+  position: relative;
+  background: #fff;
+  padding: 48px 40px 40px;
+  border-radius: 4px;
+  text-align: center;
+  max-width: 380px;
+  width: 90%;
+  font-family: var(--font);
+}
+
+.popup-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #333;
+  line-height: 1;
+}
+
+.popup-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  letter-spacing: 0.01em;
+}
+
+.popup-subtitle {
+  font-size: 15px;
+  color: #444;
+  margin: 0 0 28px;
+  line-height: 1.5;
+}
+
+.popup-greeting {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 20px;
+}
+
+.popup-logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.hidden { display: none; }
+
+@media (max-width: 700px) {
+  .checkout-layout { grid-template-columns: 1fr; }
+  .tabs { max-width: 100%; }
+}
+
+</style>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function () {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => {
+            p.classList.remove('active');
+            p.querySelectorAll('input, textarea, select').forEach(f => { f.disabled = true; });
+        });
+        this.classList.add('active');
+        const activePanel = document.getElementById('panel-' + this.dataset.tab);
+        activePanel.classList.add('active');
+        activePanel.querySelectorAll('input, textarea, select').forEach(f => { f.disabled = false; });
+    });
+});
+
+document.querySelectorAll('.tab-panel:not(.active)').forEach(p => {
+    p.querySelectorAll('input, textarea, select').forEach(f => { f.disabled = true; });
+});
+
+document.getElementById('btnConfirm').addEventListener('click', function () {
+    const form = document.getElementById('checkoutForm');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    form.submit();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (new URLSearchParams(window.location.search).get('success') === '1') {
+        document.getElementById('successPopup').classList.remove('hidden');
+    }
+});
+
+function closePopup() {
+    document.getElementById('successPopup').classList.add('hidden');
+    window.location.href = "{% url 'home' %}";
+}
+</script>
+
+{% endblock %}

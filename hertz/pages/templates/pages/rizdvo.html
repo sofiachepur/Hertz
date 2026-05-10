@@ -1,34 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Це сторінка: {{ title }}</h1>
 
+<h1>Це сторінка: {{ title }}</h1>
 
 {% for product in products %}
 
 <div class="product-card">
 
-  <h2>{{ product.title }}</h2>
 
-  <div class="images">
-    <img src="{{ product.image1.url }}">
-    {% if product.image2 %}<img src="{{ product.image2.url }}">{% endif %}
-    {% if product.image3 %}<img src="{{ product.image3.url }}">{% endif %}
-    {% if product.image4 %}<img src="{{ product.image4.url }}">{% endif %}
-    {% if product.image5 %}<img src="{{ product.image5.url }}">{% endif %}
+  <div class="slider">
+  <button class="prev">‹</button>
+    {% if product.image1 %}
+      <img class="slide active" src="{{ product.image1.url }}">
+    {% endif %}
+
+    {% if product.image2 %}
+      <img class="slide" src="{{ product.image2.url }}">
+    {% endif %}
+
+    {% if product.image3 %}
+      <img class="slide" src="{{ product.image3.url }}">
+    {% endif %}
+
+    {% if product.image4 %}
+      <img class="slide" src="{{ product.image4.url }}">
+    {% endif %}
+
+    {% if product.image5 %}
+      <img class="slide" src="{{ product.image5.url }}">
+    {% endif %}
+
+      <button class="next">›</button>
   </div>
 
-  <p><b>Ціна:</b> {{ product.price }} грн</p>
 
-  <p><b>Про товар:</b> {{ product.description }}</p>
+  <h2>{{ product.title }}</h2>
 
-  <p><b>Характеристики:</b> {{ product.characteristics }}</p>
 
-  <p><b>Догляд:</b> {{ product.care }}</p>
+  <p class="price">{{ product.price }} грн</p>
+
+  {% if product.quantity > 0 %}
+      <a href="{% url 'add_to_cart' product.id %}" class="cart-btn">
+          ДОДАТИ В КОШИК
+      </a>
+  {% else %}
+      <button class="cart-btn disabled" disabled>
+          ТОВАРУ НЕМАЄ
+      </button>
+  {% endif %}
+
+     <a href="{% url 'product_detail' product.id %}" class="details-btn">
+        ДЕТАЛЬНІШЕ
+    </a>
 
 </div>
 
 {% endfor %}
-
 
 {% endblock %}

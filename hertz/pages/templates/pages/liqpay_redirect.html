@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  .pay-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+    font-family: 'Manrope', sans-serif;
+  }
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e0e0dc;
+    border-top-color: #111;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  p { font-size: 14px; color: #888; }
+</style>
+
+<div class="pay-loading">
+  <div class="spinner"></div>
+  <p>Переходимо до оплати...</p>
+</div>
+
+<form id="liqpayForm" method="POST"
+      action="https://www.liqpay.ua/api/3/checkout"
+      accept-charset="utf-8">
+  <input type="hidden" name="data"      value="{{ liqpay_data.data }}">
+  <input type="hidden" name="signature" value="{{ liqpay_data.signature }}">
+</form>
+
+<script>
+  window.addEventListener('load', function () {
+    document.getElementById('liqpayForm').submit();
+  });
+</script>
+
+{% endblock %}
