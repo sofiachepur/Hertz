@@ -136,7 +136,7 @@ def send_status_change_email(sender, instance, **kwargs):
                 message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
                 from_email=None,
                 recipient_list=[instance.email],
-                fail_silently=False,
+                fail_silently=True,
             )
 
     if old.order_status != instance.order_status:
@@ -147,5 +147,5 @@ def send_status_change_email(sender, instance, **kwargs):
                 message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
                 from_email=None,
                 recipient_list=[instance.email],
-                fail_silently=False,
+                fail_silently=True,
             )
