@@ -100,7 +100,7 @@ def send_new_order_email(sender, instance, created, **kwargs):
             message=f'Вітаємо, {instance.name}!\n\nВаше замовлення #{instance.id} успішно оформлено.\nСума: {instance.total_price} грн\n\nГарного дня, команда Герць',
             from_email=None,
             recipient_list=[instance.email],
-            fail_silently=False,
+            fail_silently=True,
         )
 
 
