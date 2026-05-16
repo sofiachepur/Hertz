@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="info-page">
+    <div class="info-container">
+
+        <h1 class="info-title">Обмін та повернення</h1>
+
+        <p class="info-text">
+            Ми прагнемо, щоб кожен покупець залишився
+            задоволеним покупкою.
+        </p>
+
+        <p class="info-text">
+            Відповідно до законодавства України,
+            покупець має право на обмін або повернення товару
+            протягом 14 днів з моменту отримання.
+        </p>
+
+        <h2 class="info-subtitle">Умови повернення</h2>
+
+        <ul class="info-list">
+            <li>збережений товарний вигляд;</li>
+            <li>відсутність слідів використання;</li>
+            <li>наявність упаковки;</li>
+            <li>наявність підтвердження покупки.</li>
+        </ul>
+
+        <p class="info-text">
+            Звертаємо увагу, що вироби ручної роботи
+            можуть мати незначні особливості,
+            які є характерною рисою народних промислів.
+        </p>
+
+        <p class="info-text">
+            Для оформлення повернення або обміну
+            зв’яжіться з нами через контактні дані,
+            вказані на сайті.
+        </p>
+
+    </div>
+</div>
+
+<style>
+.info-page{
+    padding:80px 20px;
+    font-family:'Manrope',sans-serif;
+}
+
+.info-container{
+    max-width:900px;
+    margin:0 auto;
+}
+
+.info-title{
+    font-size:42px;
+    margin-bottom:30px;
+    text-transform:uppercase;
+}
+
+.info-subtitle{
+    font-size:24px;
+    margin:35px 0 15px;
+}
+
+.info-text{
+    font-size:16px;
+    line-height:1.8;
+    margin-bottom:18px;
+    color:#333;
+}
+
+.info-list{
+    padding-left:20px;
+}
+
+.info-list li{
+    margin-bottom:10px;
+    line-height:1.7;
+}
+</style>
+
+{% endblock %}

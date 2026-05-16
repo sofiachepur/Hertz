@@ -24,5 +24,9 @@ urlpatterns = [
 path('checkout/', views.checkout, name='checkout'),
 path('products/', views.products, name='products'),
 path('liqpay/callback/', views.liqpay_callback, name='liqpay_callback'),
+path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+path('delivery-payment/', views.delivery_payment, name='delivery_payment'),
+path('exchange-return/', views.exchange_return, name='exchange_return'),
+
 ]
 

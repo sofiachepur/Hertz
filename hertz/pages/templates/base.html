@@ -32,9 +32,8 @@
         <li><a href="/kupala/" class="nav-link {% if request.resolver_match.url_name == 'kupala' %}active{% endif %}">Івана Купала</a></li>
         <li><a href="/velykden/" class="nav-link {% if request.resolver_match.url_name == 'velykden' %}active{% endif %}">Великдень</a></li>
         <li><a href="/pobut/" class="nav-link {% if request.resolver_match.url_name == 'pobut' %}active{% endif %}">Речі побуту</a></li>
-        <li><a href="/cart/" class="nav-link {% if request.resolver_match.url_name == 'cart' %}active{% endif %}">Кошик({{ cart_count|default:0 }})</a></li>
+        <li><a href="/cart/" class="nav-link {% if request.resolver_match.url_name == 'cart' %}active{% endif %}">Кошик</a></li>
       </ul>
-
     </div>
   </nav>
 </header>
@@ -46,14 +45,28 @@
 <footer>
   <div class="footer-grid">
 
-    <div class="col-company">
-      <p class="col-title">Компанія</p>
-      <ul class="col-links">
-        <li><a href="#">Політика конфеденційності</a></li>
-        <li><a href="#">Доставка та оплата</a></li>
-        <li><a href="#">Обмін та повернення</a></li>
-      </ul>
-    </div>
+  <div class="col-company">
+    <p class="col-title">Компанія</p>
+    <ul class="col-links">
+        <li>
+            <a href="{% url 'privacy_policy' %}">
+                Політика конфіденційності
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'delivery_payment' %}">
+                Доставка та оплата
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'exchange_return' %}">
+                Обмін та повернення
+            </a>
+        </li>
+    </ul>
+</div>
 
     <div class="col-contact">
       <p class="col-title">Зв'язатися з нами</p>

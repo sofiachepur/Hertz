@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product, Subscriber
+from .models import Product, Subscriber, Category, ProductType
 
 
 def home(request):
@@ -7,28 +7,99 @@ def home(request):
 
 
 def rizdvo(request):
-    products = Product.objects.filter(category__name="Різдво")
-    return render(request, 'pages/rizdvo.html', {'products': products})
 
+    product_type = request.GET.get('type')
+
+    # базова вибірка товарів цієї сторінки
+    products = Product.objects.filter(category__name="Різдво")
+
+    # фільтр по типу
+    if product_type:
+        products = products.filter(product_type_id=product_type)
+
+
+    # ⬇️ ОЦЕ ГОЛОВНЕ ВИПРАВЛЕННЯ
+    types = ProductType.objects.filter(product__category__name="Різдво").distinct()
+
+    products = apply_sorting(products, request)
+
+    return render(request, 'pages/rizdvo.html', {
+        'products': products,
+        'types': types,
+    })
 
 def kupala(request):
-    products = Product.objects.filter(category__name="Купала")
-    return render(request, 'pages/kupala.html', {'products': products})
 
+    product_type = request.GET.get('type')
+
+    products = Product.objects.filter(category__name="Купала")
+
+    if product_type:
+        products = products.filter(product_type_id=product_type)
+
+    types = ProductType.objects.filter(product__category__name="Купала").distinct()
+
+    products = apply_sorting(products, request)
+
+    return render(request, 'pages/kupala.html', {
+        'products': products,
+        'types': types,
+    })
 
 def obzhynky(request):
-    products = Product.objects.filter(category__name="Обжинки")
-    return render(request, 'pages/obzhynky.html', {'products': products})
 
+    product_type = request.GET.get('type')
+
+    products = Product.objects.filter(category__name="Обжинки")
+
+    if product_type:
+        products = products.filter(product_type_id=product_type)
+
+    types = ProductType.objects.filter(product__category__name="Обжинки").distinct()
+
+    products = apply_sorting(products, request)
+
+    return render(request, 'pages/obzhynky.html', {
+        'products': products,
+        'types': types,
+    })
 
 def velykden(request):
-    products = Product.objects.filter(category__name="Великдень")
-    return render(request, 'pages/velykden.html', {'products': products})
 
+    product_type = request.GET.get('type')
+
+    products = Product.objects.filter(category__name="Великдень")
+
+    if product_type:
+        products = products.filter(product_type_id=product_type)
+
+    types = ProductType.objects.filter(product__category__name="Великдень").distinct()
+
+    products = apply_sorting(products, request)
+
+    return render(request, 'pages/velykden.html', {
+        'products': products,
+        'types': types,
+    })
 
 def pobut(request):
+
+
+    product_type = request.GET.get('type')
+
     products = Product.objects.filter(category__name="Побут")
-    return render(request, 'pages/pobut.html', {'products': products})
+
+    if product_type:
+        products = products.filter(product_type_id=product_type)
+
+    products = apply_sorting(products, request)
+
+    types = ProductType.objects.filter(product__category__name="Побут").distinct()
+
+    return render(request, 'pages/pobut.html', {
+        'products': products,
+        'types': types,
+    })
 
 
 def products(request):
@@ -243,28 +314,28 @@ def _liqpay_form(order_id, amount, description, server_url, result_url):
     return {"data": data_b64, "signature": signature}
 
 
-def home(request):
-    return render(request, 'pages/home.html')
+# def home(request):
+#     return render(request, 'pages/home.html')
 
-def rizdvo(request):
-    products = Product.objects.filter(category__name="Різдво")
-    return render(request, 'pages/rizdvo.html', {'products': products})
-
-def kupala(request):
-    products = Product.objects.filter(category__name="Купала")
-    return render(request, 'pages/kupala.html', {'products': products})
-
-def obzhynky(request):
-    products = Product.objects.filter(category__name="Обжинки")
-    return render(request, 'pages/obzhynky.html', {'products': products})
-
-def velykden(request):
-    products = Product.objects.filter(category__name="Великдень")
-    return render(request, 'pages/velykden.html', {'products': products})
-
-def pobut(request):
-    products = Product.objects.filter(category__name="Побут")
-    return render(request, 'pages/pobut.html', {'products': products})
+# def rizdvo(request):
+#     products = Product.objects.filter(category__name="Різдво")
+#     return render(request, 'pages/rizdvo.html', {'products': products})
+#
+# def kupala(request):
+#     products = Product.objects.filter(category__name="Купала")
+#     return render(request, 'pages/kupala.html', {'products': products})
+#
+# def obzhynky(request):
+#     products = Product.objects.filter(category__name="Обжинки")
+#     return render(request, 'pages/obzhynky.html', {'products': products})
+#
+# def velykden(request):
+#     products = Product.objects.filter(category__name="Великдень")
+#     return render(request, 'pages/velykden.html', {'products': products})
+#
+# def pobut(request):
+#     products = Product.objects.filter(category__name="Побут")
+#     return render(request, 'pages/pobut.html', {'products': products})
 
 def products_view(request):
     products = Product.objects.all()
@@ -292,13 +363,22 @@ def cart(request):
     cart_data = request.session.get('cart', {})
     products  = []
     total     = 0
-    for product_id, qty in cart_data.items():
-        product               = Product.objects.get(id=product_id)
-        product.cart_quantity = qty
-        product.total_price   = product.price * qty
-        total                += product.total_price
-        products.append(product)
+
+    for product_id, qty in list(cart_data.items()):
+        try:
+            product               = Product.objects.get(id=product_id)
+            product.cart_quantity = qty
+            product.total_price   = product.price * qty
+            total                += product.total_price
+            products.append(product)
+        except Product.DoesNotExist:
+            # товар видалено з БД — прибираємо з сесії
+            del cart_data[product_id]
+            request.session['cart'] = cart_data
+            request.session.modified = True
+
     return render(request, 'pages/cart.html', {'products': products, 'total': total})
+
 
 def increase_quantity(request, product_id):
     cart       = request.session.get('cart', {})
@@ -331,9 +411,6 @@ def remove_from_cart(request, product_id):
     request.session.modified = True
     return redirect('cart')
 
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    return render(request, 'pages/product_detail.html', {'product': product})
 
 
 def checkout(request):
@@ -418,3 +495,56 @@ def liqpay_callback(request):
         pass
 
     return HttpResponse('OK')
+
+
+def category_page(request, category_id):
+    category = Category.objects.get(id=category_id)
+
+    products = Product.objects.filter(category=category)
+
+    type_id = request.GET.get('type')
+
+    if type_id:
+        products = products.filter(product_type_id=type_id)
+
+    product_types = ProductType.objects.all()
+
+    return render(request, 'category.html', {
+        'category': category,
+        'products': products,
+        'product_types': product_types
+    })
+
+
+def apply_sorting(products, request):
+    sort = request.GET.get('sort')
+
+    if sort == 'name_asc':
+        return products.order_by('title')
+
+    if sort == 'name_desc':
+        return products.order_by('-title')
+
+    if sort == 'price_low':
+        return products.order_by('price')
+
+    if sort == 'price_high':
+        return products.order_by('-price')
+
+    if sort == 'best':
+        return products.order_by('-quantity')  # умовні "лідери продажів"
+
+    return products
+
+from django.shortcuts import render
+
+def privacy_policy(request):
+    return render(request, 'pages/privacy_policy.html')
+
+
+def delivery_payment(request):
+    return render(request, 'pages/delivery_payment.html')
+
+
+def exchange_return(request):
+    return render(request, 'pages/exchange_return.html')

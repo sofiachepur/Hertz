@@ -1,39 +1,276 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<h1>{{ product.title }}</h1>
 
-<div class="gallery_photo">
-    {% if product.image1 %}
-      <img class="slide active" src="{{ product.image1.url }}">
-    {% endif %}
+<div class="product-detail-wrapper">
 
-    {% if product.image2 %}
-      <img class="slide" src="{{ product.image2.url }}">
-    {% endif %}
+  <!-- ── PRODUCT LAYOUT ── -->
+  <div class="pd-layout">
 
-    {% if product.image3 %}
-      <img class="slide" src="{{ product.image3.url }}">
-    {% endif %}
+    <!-- LEFT: Gallery -->
+    <div class="pd-gallery">
 
-    {% if product.image4 %}
-      <img class="slide" src="{{ product.image4.url }}">
-    {% endif %}
+      <!-- Thumbnails -->
+      <div class="pd-thumbs">
+        {% if product.image1 %}<img class="pd-thumb active" src="{{ product.image1.url }}" alt="">{% endif %}
+        {% if product.image2 %}<img class="pd-thumb" src="{{ product.image2.url }}" alt="">{% endif %}
+        {% if product.image3 %}<img class="pd-thumb" src="{{ product.image3.url }}" alt="">{% endif %}
+        {% if product.image4 %}<img class="pd-thumb" src="{{ product.image4.url }}" alt="">{% endif %}
+        {% if product.image5 %}<img class="pd-thumb" src="{{ product.image5.url }}" alt="">{% endif %}
+      </div>
 
-    {% if product.image5 %}
-      <img class="slide" src="{{ product.image5.url }}">
-    {% endif %}
+      <!-- Main image -->
+      <div class="pd-main-img">
+        {% if product.image1 %}<img id="pdMainImg" src="{{ product.image1.url }}" alt="{{ product.title }}">{% endif %}
+      </div>
 
+    </div>
+
+    <!-- RIGHT: Info -->
+    <div class="pd-info">
+
+      <h1 class="pd-title">{{ product.title }}</h1>
+
+      <p class="pd-price-label">Ціна:</p>
+      <p class="pd-price">{{ product.price }} грн</p>
+
+      {% if product.quantity > 0 %}
+        <a href="{% url 'add_to_cart' product.id %}" class="pd-buy-btn">Купити</a>
+      {% else %}
+        <button class="pd-buy-btn pd-buy-disabled" disabled>Немає в наявності</button>
+      {% endif %}
+
+      <!-- Tabs -->
+      <div class="pd-tabs">
+        <button class="pd-tab active" data-tab="desc">Про товар</button>
+        <button class="pd-tab" data-tab="specs">Характеристика</button>
+        <button class="pd-tab" data-tab="care">Догляд</button>
+      </div>
+
+      <div class="pd-tab-content active" id="tab-desc">
+        <p>{{ product.description }}</p>
+      </div>
+      <div class="pd-tab-content" id="tab-specs">
+        <p>{{ product.characteristics }}</p>
+      </div>
+      <div class="pd-tab-content" id="tab-care">
+        <p>{{ product.care }}</p>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<p>{{ product.description }}</p>
-<p>Ціна: {{ product.price }} грн</p>
-<p>Характеристика: {{ product.specs }}</p>
-<p>Догляд: {{ product.care }}</p>
+<style>
+.product-detail-wrapper {
+  font-family: 'Manrope', sans-serif;
+  color: #111110;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
 
-<a href="{% url 'add_to_cart' product.id %}" class="cart-btn">
-    ДОДАТИ В КОШИК
-</a>
+/* ── LAYOUT ── */
+.pd-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
 
+/* ── GALLERY ── */
+.pd-gallery {
+  display: flex;
+  gap: 8px;
+}
+
+.pd-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.pd-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 2px;
+  transition: border-color 0.2s, opacity 0.2s;
+  opacity: 0.65;
+  background: #e8e8e4;
+  display: block;
+}
+
+.pd-thumb:hover { opacity: 0.9; }
+.pd-thumb.active {
+  border-color: #111110;
+  opacity: 1;
+}
+
+.pd-main-img {
+  flex: 1;
+  aspect-ratio: 1 / 1;
+  background: #e8e8e4;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pd-main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.25s;
+}
+
+/* ── INFO ── */
+.pd-info {
+  padding-top: 8px;
+}
+
+.pd-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.pd-price-label {
+  font-size: 12px;
+  color: #888884;
+  margin-bottom: 2px;
+}
+
+.pd-price {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.pd-buy-btn {
+  display: block;
+  width: 100%;
+  background: #111110;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 14px;
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 28px;
+  transition: opacity 0.2s;
+}
+
+.pd-buy-btn:hover { opacity: 0.82; }
+.pd-buy-disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── TABS ── */
+.pd-tabs {
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid #d8d8d4;
+  margin-bottom: 20px;
+}
+
+.pd-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 0 0 10px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #888884;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.pd-tab:hover { color: #111110; }
+.pd-tab.active {
+  color: #111110;
+  border-bottom-color: #111110;
+}
+
+.pd-tab-content {
+  display: none;
+  font-size: 13px;
+  line-height: 1.75;
+  color: #333330;
+}
+
+.pd-tab-content p { margin-bottom: 12px; }
+.pd-tab-content p:last-child { margin-bottom: 0; }
+.pd-tab-content.active { display: block; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  .pd-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pd-thumbs {
+    width: 60px;
+  }
+  .pd-thumb {
+    width: 60px;
+    height: 60px;
+  }
+  .pd-title { font-size: 18px; }
+  .pd-tabs { gap: 18px; }
+}
+
+@media (max-width: 400px) {
+  .pd-gallery { flex-direction: column-reverse; }
+  .pd-thumbs {
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .pd-thumb { width: 64px; height: 64px; flex-shrink: 0; }
+  .pd-main-img { width: 100%; }
+}
+</style>
+
+<script>
+/* ── Thumbnail switching ── */
+const thumbs   = document.querySelectorAll('.pd-thumb');
+const mainImg  = document.getElementById('pdMainImg');
+
+thumbs.forEach(thumb => {
+  thumb.addEventListener('click', () => {
+    thumbs.forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+    if (mainImg) {
+      mainImg.style.opacity = '0';
+      setTimeout(() => {
+        mainImg.src = thumb.src;
+        mainImg.style.opacity = '1';
+      }, 150);
+    }
+  });
+});
+
+/* ── Tab switching ── */
+document.querySelectorAll('.pd-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.pd-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pd-tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+</script>
 
 {% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="info-page">
+    <div class="info-container">
+
+        <h1 class="info-title">Політика конфіденційності</h1>
+
+        <p class="info-text">
+            Наш магазин народних промислів поважає право кожного користувача
+            на конфіденційність та захист персональних даних.
+        </p>
+
+        <p class="info-text">
+            Ми збираємо лише ту інформацію, яка необхідна для оформлення
+            та доставки замовлень: ім’я, номер телефону,
+            адресу електронної пошти та адресу доставки.
+        </p>
+
+        <h2 class="info-subtitle">Використання даних</h2>
+
+        <ul class="info-list">
+            <li>обробка та оформлення замовлень;</li>
+            <li>зв’язок із покупцем;</li>
+            <li>організація доставки;</li>
+            <li>покращення роботи сайту та сервісу.</li>
+        </ul>
+
+        <p class="info-text">
+            Ми не передаємо персональні дані третім особам,
+            окрім випадків, необхідних для виконання замовлення.
+        </p>
+
+        <p class="info-text">
+            Користуючись сайтом, ви погоджуєтесь з умовами
+            цієї Політики конфіденційності.
+        </p>
+
+    </div>
+</div>
+
+<style>
+.info-page{
+    padding:80px 20px;
+    font-family:'Manrope',sans-serif;
+}
+
+.info-container{
+    max-width:900px;
+    margin:0 auto;
+}
+
+.info-title{
+    font-size:42px;
+    margin-bottom:30px;
+    text-transform:uppercase;
+}
+
+.info-subtitle{
+    font-size:24px;
+    margin:35px 0 15px;
+}
+
+.info-text{
+    font-size:16px;
+    line-height:1.8;
+    margin-bottom:18px;
+    color:#333;
+}
+
+.info-list{
+    padding-left:20px;
+}
+
+.info-list li{
+    margin-bottom:10px;
+    line-height:1.7;
+}
+</style>
+
+{% endblock %}

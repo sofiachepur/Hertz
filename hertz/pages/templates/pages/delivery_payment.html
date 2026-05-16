@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="info-page">
+    <div class="info-container">
+
+        <h1 class="info-title">Доставка та оплата</h1>
+
+        <p class="info-text">
+            Ми здійснюємо доставку виробів народних промислів
+            по всій Україні.
+        </p>
+
+        <h2 class="info-subtitle">Способи доставки</h2>
+
+        <ul class="info-list">
+            <li>Нова Пошта</li>
+            <li>Укрпошта</li>
+            <li>Самовивіз</li>
+        </ul>
+
+        <p class="info-text">
+            Термін доставки залежить від обраної служби
+            та зазвичай становить від 1 до 5 робочих днів.
+        </p>
+
+        <h2 class="info-subtitle">Способи оплати</h2>
+
+        <ul class="info-list">
+            <li>Оплата банківською карткою онлайн</li>
+            <li>Післяплата при отриманні</li>
+            <li>Оплата на банківський рахунок</li>
+        </ul>
+
+        <p class="info-text">
+            Після оформлення замовлення менеджер може
+            зв’язатися з вами для уточнення деталей.
+        </p>
+
+    </div>
+</div>
+
+<style>
+.info-page{
+    padding:80px 20px;
+    font-family:'Manrope',sans-serif;
+}
+
+.info-container{
+    max-width:900px;
+    margin:0 auto;
+}
+
+.info-title{
+    font-size:42px;
+    margin-bottom:30px;
+    text-transform:uppercase;
+}
+
+.info-subtitle{
+    font-size:24px;
+    margin:35px 0 15px;
+}
+
+.info-text{
+    font-size:16px;
+    line-height:1.8;
+    margin-bottom:18px;
+    color:#333;
+}
+
+.info-list{
+    padding-left:20px;
+}
+
+.info-list li{
+    margin-bottom:10px;
+    line-height:1.7;
+}
+</style>
+
+{% endblock %}

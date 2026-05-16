@@ -1,61 +1,519 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<h1>Це сторінка: {{ title }}</h1>
 
-{% for product in products %}
+<div class="kupala-wrapper">
 
-<div class="product-card">
+  <div class="hero-collage">
+    <div class="hero-left">
+      <img src="{% static 'img/image22.png' %}" alt="">
+    </div>
+    <div class="hero-right">
+      <img src="{% static 'img/image23.png' %}" alt="">
+
+    </div>
+  </div>
+
+  <div class="kupala-header">
+    <h1 class="page-title">Івана Купала</h1>
+    <p class="page-sub">Літні свята</p>
+
+    <div class="filters-row">
+      <a href="{% url 'kupala' %}"
+         class="filter-link {% if not request.GET.type %}active{% endif %}">Все</a>
+
+      {% for type in types %}
+        <a href="?type={{ type.id }}"
+           class="filter-link {% if request.GET.type == type.id|stringformat:'s' %}active{% endif %}">
+          {{ type.name }}
+        </a>
+      {% endfor %}
 
 
-  <div class="slider">
-  <button class="prev">‹</button>
-    {% if product.image1 %}
-      <img class="slide active" src="{{ product.image1.url }}">
-    {% endif %}
-
-    {% if product.image2 %}
-      <img class="slide" src="{{ product.image2.url }}">
-    {% endif %}
-
-    {% if product.image3 %}
-      <img class="slide" src="{{ product.image3.url }}">
-    {% endif %}
-
-    {% if product.image4 %}
-      <img class="slide" src="{{ product.image4.url }}">
-    {% endif %}
-
-    {% if product.image5 %}
-      <img class="slide" src="{{ product.image5.url }}">
-    {% endif %}
-
-      <button class="next">›</button>
+      <div class="custom-select-wrap">
+        <button class="custom-select-btn" id="sortBtn" type="button">
+          Сортувати <span class="cs-arrow">▾</span>
+        </button>
+        <ul class="custom-select-list" id="sortList">
+          <li><a href="?sort=best"       class="cs-option {% if request.GET.sort == 'best'       %}cs-active{% endif %}">Лідери продажів</a></li>
+          <li><a href="?sort=name_asc"   class="cs-option {% if request.GET.sort == 'name_asc'   %}cs-active{% endif %}">За назвою, А-Я</a></li>
+          <li><a href="?sort=name_desc"  class="cs-option {% if request.GET.sort == 'name_desc'  %}cs-active{% endif %}">За назвою, Я-А</a></li>
+          <li><a href="?sort=price_low"  class="cs-option {% if request.GET.sort == 'price_low'  %}cs-active{% endif %}">Від дешевших</a></li>
+          <li><a href="?sort=price_high" class="cs-option {% if request.GET.sort == 'price_high' %}cs-active{% endif %}">Від дорожчих</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
 
 
-  <h2>{{ product.title }}</h2>
+  <div class="kupala-products" id="productsGrid">
+    {% for product in products %}
 
+      {% if forloop.counter == 5 %}
+        <div class="insert-block">
+          <div class="insert-img">
+            <img src="{% static 'img/Group79.png' %}" alt="">
+          </div>
+          <div class="insert-text">
+            <p>
+              У цій категорії зібрані речі, натхненні давнім святом завершення жнив — символом
+              подяки за врожай і щедрість землі. Вони передають тепло серпневого сонця, спокій полів і радість
+              спільної праці.
+              Декор із природних матеріалів, плетені вироби, текстиль і символічні прикраси створюють у домі
+              атмосферу достатку, затишку й зв’язку з традиціями.
+              Це речі, що зберігають пам’ять про землю, працю та красу народних обрядів.
 
-  <p class="price">{{ product.price }} грн</p>
+            </p>
+          </div>
+        </div>
+      {% endif %}
 
-  {% if product.quantity > 0 %}
-      <a href="{% url 'add_to_cart' product.id %}" class="cart-btn">
-          ДОДАТИ В КОШИК
-      </a>
-  {% else %}
-      <button class="cart-btn disabled" disabled>
-          ТОВАРУ НЕМАЄ
-      </button>
+      <div class="product-card" data-index="{{ forloop.counter }}">
+        <div class="card-img-wrap">
+          <a href="{% url 'product_detail' product.id %}" class="card-img-link">
+            <div class="slider">
+              <button class="prev" type="button">&#8249;</button>
+              {% if product.image1 %}<img class="slide active" src="{{ product.image1.url }}" alt="{{ product.title }}">{% endif %}
+              {% if product.image2 %}<img class="slide" src="{{ product.image2.url }}" alt="">{% endif %}
+              {% if product.image3 %}<img class="slide" src="{{ product.image3.url }}" alt="">{% endif %}
+              {% if product.image4 %}<img class="slide" src="{{ product.image4.url }}" alt="">{% endif %}
+              {% if product.image5 %}<img class="slide" src="{{ product.image5.url }}" alt="">{% endif %}
+              <button class="next" type="button">&#8250;</button>
+            </div>
+          </a>
+          {% if product.quantity > 0 %}
+            <a href="{% url 'add_to_cart' product.id %}" class="card-add-btn" onclick="event.stopPropagation()">+ в кошик</a>
+          {% endif %}
+        </div>
+        <div class="product-info">
+          <a href="{% url 'product_detail' product.id %}" class="product-name">{{ product.title }}</a>
+          <p class="product-price">{{ product.price }} грн</p>
+        </div>
+      </div>
+
+    {% endfor %}
+  </div>
+
+  {% if products|length > 8 %}
+  <div class="load-more-wrap">
+    <button class="load-more-btn" id="loadMoreBtn">Показати більше</button>
+  </div>
   {% endif %}
-
-     <a href="{% url 'product_detail' product.id %}" class="details-btn">
-        ДЕТАЛЬНІШЕ
-    </a>
 
 </div>
 
-{% endfor %}
+<style>
+.kupala-wrapper {
+  font-family: 'Manrope', sans-serif;
+  color: #111110;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 80px;
+}
 
+
+.hero-collage {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.hero-left img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 520px;
+}
+
+.hero-right img {
+  width: 100%;
+  flex: 1;
+  object-fit: cover;
+  display: block;
+}
+
+
+.kupala-header {
+  padding: 28px 24px 0;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: #264796;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+   font-family: 'Manrope', sans-serif;
+}
+
+.page-sub {
+  font-size: 14px;
+  color: #888884;
+  margin-bottom: 18px;
+}
+
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+
+}
+
+.filter-link {
+  text-decoration: none;
+  font-size: 14px;
+  color: #111110;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.filter-link:hover { color: #264796; }
+.filter-link.active {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+
+.custom-select-wrap {
+  position: relative;
+  margin-left: auto;
+}
+
+.custom-select-btn {
+  background: none;
+  border: none;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  color: #111110;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  outline: none;
+  white-space: nowrap;
+}
+
+.cs-arrow {
+  font-size: 10px;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.custom-select-wrap.open .cs-arrow { transform: rotate(180deg); }
+
+.custom-select-list {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #d8d8d4;
+  border-radius: 3px;
+  list-style: none;
+  min-width: 185px;
+  z-index: 200;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+  padding: 4px 0;
+}
+
+.custom-select-wrap.open .custom-select-list { display: block; }
+
+.cs-option {
+  display: block;
+  padding: 9px 16px;
+  font-size: 13px;
+  color: #111110;
+  text-decoration: none;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.cs-option:hover { background: #f5f4f0; }
+.cs-option.cs-active { font-weight: 600; }
+
+
+.kupala-products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 24px 0 0;
+}
+
+
+.insert-block {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 8px 0;
+  min-height: 420px;
+}
+
+.insert-img {
+  overflow: hidden;
+}
+
+.insert-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.insert-text {
+  padding: 48px 40px;
+  display: flex;
+  align-items: center;
+  background: #f9f8f4;
+}
+
+.insert-text p {
+  font-size: 32px;
+  line-height: 1.8;
+  color: #333330;
+}
+
+
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 32px 24px 0;
+}
+
+.load-more-btn {
+  background: none;
+  border: 1px solid #111110;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111110;
+  padding: 12px 40px;
+  cursor: pointer;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, color 0.2s;
+}
+
+.load-more-btn:hover {
+  background: #111110;
+  color: #fff;
+}
+
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-img-link {
+  display: block;
+  text-decoration: none;
+}
+
+.card-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-img-wrap:hover::after {
+  background: rgba(0,0,0,0.15);
+}
+
+.card-add-btn {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(255,255,255,0.9);
+  color: #111110;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  height: 40px;
+  text-decoration: none;
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.card-img-wrap:hover .card-add-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  margin-bottom: 8px;
+  height: 354px;
+}
+
+.slider .slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.slider .slide.active { display: block; }
+
+.slider .prev,
+.slider .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 2px 8px;
+  z-index: 2;
+  line-height: 1;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.slider:hover .prev,
+.slider:hover .next { opacity: 1; }
+
+.slider .prev { left: 4px; }
+.slider .next { right: 4px; }
+
+
+.product-info { padding: 8px 2px 0; }
+
+.product-name {
+  display: block;
+  font-size: 12px;
+  color: #111110;
+  text-decoration: none;
+  margin-bottom: 3px;
+  line-height: 1.45;
+}
+
+.product-name:hover { text-decoration: underline; }
+
+.product-price {
+  font-size: 12px;
+  font-weight: 500;
+  color: #111110;
+}
+
+@media (max-width: 1024px) {
+  .kupala-products { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .kupala-products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .insert-block { grid-template-columns: 1fr; min-height: auto; }
+  .insert-img { height: 260px; }
+  .insert-text { padding: 28px 20px; }
+  .insert-text p { font-size: 16px; }
+}
+
+@media (max-width: 600px) {
+  .hero-collage { grid-template-columns: 1fr; }
+  .hero-left img { height: 260px; }
+  .hero-right { flex-direction: row; height: 160px; }
+  .hero-right img { flex: 1; }
+  .page-title { font-size: 28px; }
+  .filters-row { gap: 14px; }
+  .kupala-header { padding: 20px 16px 0; }
+  .kupala-products { padding: 16px 16px 0; }
+}
+
+@media (max-width: 360px) {
+  .kupala-products { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+
+const sortBtn  = document.getElementById('sortBtn');
+const sortWrap = sortBtn?.closest('.custom-select-wrap');
+
+sortBtn?.addEventListener('click', e => {
+  e.stopPropagation();
+  sortWrap.classList.toggle('open');
+});
+
+document.addEventListener('click', () => sortWrap?.classList.remove('open'));
+
+
+const BATCH = 4;
+let shown = 8;
+
+const allCards = () => [...document.querySelectorAll('.product-card')];
+
+allCards().forEach(card => {
+  if (parseInt(card.dataset.index) > shown) {
+    card.style.display = 'none';
+  }
+});
+
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+loadMoreBtn?.addEventListener('click', () => {
+  shown += BATCH;
+  allCards().forEach(card => {
+    if (parseInt(card.dataset.index) <= shown) {
+      card.style.display = '';
+    }
+  });
+  if (shown >= allCards().length) {
+    loadMoreBtn.closest('.load-more-wrap').style.display = 'none';
+  }
+});
+
+
+document.querySelectorAll('.slider').forEach(slider => {
+  const slides = slider.querySelectorAll('.slide');
+  if (slides.length <= 1) {
+    slider.querySelector('.prev')?.remove();
+    slider.querySelector('.next')?.remove();
+    return;
+  }
+  let cur = 0;
+  const show = i => {
+    slides[cur].classList.remove('active');
+    cur = (i + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+  };
+  slider.querySelector('.prev').addEventListener('click', e => { e.preventDefault(); show(cur - 1); });
+  slider.querySelector('.next').addEventListener('click', e => { e.preventDefault(); show(cur + 1); });
+});
+</script>
 
 {% endblock %}
