@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: hertz
+    runtime: python
+    rootDir: Hertz
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn hertz.wsgi:application
