@@ -431,7 +431,6 @@
   font-weight: 500;
   color: #111110;
 }
-
 @media (max-width: 1024px) {
   .kupala-products { grid-template-columns: repeat(3, 1fr); }
 }
@@ -439,24 +438,52 @@
 @media (max-width: 768px) {
   .kupala-products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .insert-block { grid-template-columns: 1fr; min-height: auto; }
-  .insert-img { height: 260px; }
   .insert-text { padding: 28px 20px; }
   .insert-text p { font-size: 16px; }
 }
 
 @media (max-width: 600px) {
   .hero-collage { grid-template-columns: 1fr; }
-  .hero-left img { height: 260px; }
-  .hero-right { flex-direction: row; height: 160px; }
-  .hero-right img { flex: 1; }
+  .hero-left img { height: 280px; }
+  .hero-right { flex-direction: column; height: auto; }
+  .hero-right img { height: 200px; flex: none; }
+
   .page-title { font-size: 28px; }
   .filters-row { gap: 14px; }
   .kupala-header { padding: 20px 16px 0; }
-  .kupala-products { padding: 16px 16px 0; }
+
+  .kupala-products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 12px 12px 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .product-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .slider { height: 240px !important; }
+  .product-name { font-size: 11px; }
+  .product-price { font-size: 11px; }
+
+  .insert-block { grid-template-columns: 1fr; min-height: auto; }
+  .insert-text { padding: 20px 16px; }
+  .insert-text p { font-size: 14px; line-height: 1.6; }
+
+  .load-more-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 24px 12px;
+  }
 }
 
-@media (max-width: 360px) {
-  .kupala-products { grid-template-columns: 1fr; }
+@media (max-width: 400px) {
+  .slider { height: 200px !important; }
+  .page-title { font-size: 22px; }
+  .kupala-products { gap: 6px; padding: 8px 8px 0; }
 }
 </style>
 
