@@ -508,7 +508,10 @@
 }
 
 @media (max-width: 700px) {
-  .hero-collage { grid-template-columns: 1fr; }
+  .hero-collage {
+    display: flex;
+    flex-direction: column;
+  }
   .hero-left img { height: 260px; }
   .hero-right { flex-direction: row; height: 160px; }
   .hero-right img { flex: 1; }
