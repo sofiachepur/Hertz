@@ -5,7 +5,7 @@
 
 <div class="velykden-wrapper">
 
-  <!-- HERO -->
+
   <div class="hero-collage">
 
     <div class="hero-left">
@@ -19,7 +19,6 @@
 
   </div>
 
-  <!-- ── TITLE + FILTERS ROW ── -->
   <div class="velykden-header">
     <h1 class="page-title">Великдень</h1>
     <p class="page-sub">Весняні свята</p>
@@ -35,7 +34,7 @@
         </a>
       {% endfor %}
 
-      <!-- Custom dropdown sort -->
+
       <div class="custom-select-wrap">
         <button class="custom-select-btn" id="sortBtn" type="button">
           Сортувати <span class="cs-arrow">▾</span>
@@ -51,7 +50,6 @@
     </div>
   </div>
 
-  <!-- ── PRODUCTS GRID ── -->
   <div class="velykden-products" id="productsGrid">
     {% for product in products %}
 
@@ -116,7 +114,6 @@
     font-family:'Manrope',sans-serif;
 }
 
-/* HERO */
 
 .hero-collage{
     display:grid;
@@ -146,8 +143,6 @@
     object-fit:cover;
 }
 
-/* LAYOUT */
-/* ── HEADER + FILTERS ── */
 .velykden-header {
   padding: 28px 24px 0;
 }
@@ -192,7 +187,6 @@
   text-underline-offset: 3px;
 }
 
-/* ── CUSTOM SELECT ── */
 .custom-select-wrap {
   position: relative;
   margin-left: auto;
@@ -251,7 +245,7 @@
 .cs-option:hover { background: #f5f4f0; }
 .cs-option.cs-active { font-weight: 600; }
 
-/* ── PRODUCTS GRID ── */
+
 .velykden-products {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -259,7 +253,6 @@
   padding: 24px 0 0;
 }
 
-/* ── INSERT BLOCK ── */
 .insert-block {
   grid-column: 1 / -1;
   display: grid;
@@ -293,7 +286,7 @@
   color: #333330;
 }
 
-/* ── LOAD MORE ── */
+
 .load-more-wrap {
   display: flex;
   justify-content: center;
@@ -319,7 +312,6 @@
   color: #fff;
 }
 
-/* ── PRODUCT CARD ── */
 .product-card {
   display: flex;
   flex-direction: column;
@@ -377,7 +369,7 @@
   transform: translateY(0);
 }
 
-/* ── SLIDER ── */
+
 .slider {
   position: relative;
   width: 100%;
@@ -421,7 +413,7 @@
 .slider .prev { left: 4px; }
 .slider .next { right: 4px; }
 
-/* ── PRODUCT INFO ── */
+
 .product-info { padding: 8px 2px 0; }
 
 .product-name {
@@ -440,8 +432,6 @@
   font-weight: 500;
   color: #111110;
 }
-
-/* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   .velykden-products { grid-template-columns: repeat(3, 1fr); }
 }
@@ -449,29 +439,56 @@
 @media (max-width: 768px) {
   .velykden-products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .insert-block { grid-template-columns: 1fr; min-height: auto; }
-  .insert-img { height: 260px; }
   .insert-text { padding: 28px 20px; }
   .insert-text p { font-size: 16px; }
 }
 
 @media (max-width: 600px) {
   .hero-collage { grid-template-columns: 1fr; }
-  .hero-left img { height: 260px; }
-  .hero-right { flex-direction: row; height: 160px; }
-  .hero-right img { flex: 1; }
+  .hero-left img { height: 280px; }
+  .hero-right { flex-direction: column; height: auto; }
+  .hero-right img { height: 200px; flex: none; }
+
   .page-title { font-size: 28px; }
   .filters-row { gap: 14px; }
   .velykden-header { padding: 20px 16px 0; }
-  .velykden-products { padding: 16px 16px 0; }
+
+  .velykden-products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 12px 12px 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .product-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .slider { height: 240px !important; }
+  .product-name { font-size: 11px; }
+  .product-price { font-size: 11px; }
+
+  .insert-block { grid-template-columns: 1fr; min-height: auto; }
+  .insert-text { padding: 20px 16px; }
+  .insert-text p { font-size: 14px; line-height: 1.6; }
+
+  .load-more-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 24px 12px;
+  }
 }
 
-@media (max-width: 360px) {
-  .velykden-products { grid-template-columns: 1fr; }
+@media (max-width: 400px) {
+  .slider { height: 200px !important; }
+  .page-title { font-size: 22px; }
+  .velykden-products { gap: 6px; padding: 8px 8px 0; }
 }
 </style>
 
 <script>
-/* ── Custom select ── */
 const sortBtn  = document.getElementById('sortBtn');
 const sortWrap = sortBtn?.closest('.custom-select-wrap');
 
@@ -482,7 +499,6 @@ sortBtn?.addEventListener('click', e => {
 
 document.addEventListener('click', () => sortWrap?.classList.remove('open'));
 
-/* ── Load more ── */
 const BATCH = 4;
 let shown = 8;
 
@@ -507,7 +523,6 @@ loadMoreBtn?.addEventListener('click', () => {
   }
 });
 
-/* ── Sliders ── */
 document.querySelectorAll('.slider').forEach(slider => {
   const slides = slider.querySelectorAll('.slide');
   if (slides.length <= 1) {
