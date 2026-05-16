@@ -124,4 +124,51 @@
 
 </main>
 
+<style>
+
+
+@media (max-width: 480px) {
+  .photo_gallery {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    position: static !important;
+    gap: 8px;
+    padding: 0 16px;
+  }
+
+  .photo-wrap {
+    position: static !important;
+    width: 100% !important;
+    height: 220px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+  }
+}
+
+    @media (max-width: 780px) {
+  .photo_gallery {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    gap: 8px;
+    padding: 0 16px;
+  }
+
+  .photo-wrap {
+    position: static;
+    width: 100% !important;
+    height: 220px !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+
+</style>
+
 {% endblock %}
