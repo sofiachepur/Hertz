@@ -796,7 +796,7 @@
             height: 40px;
             display: flex;
             align-content: center;
-            justify-content: center;
+            padding-bottom: 10px;
             font-size: 15px;
         }
 

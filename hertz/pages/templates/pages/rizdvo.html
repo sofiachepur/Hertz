@@ -504,7 +504,7 @@
 }
 
 @media (max-width: 900px) {
-  .rizdvo-products { grid-template-columns: repeat(2, 2fr); }
+  .rizdvo-products { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 700px) {
@@ -542,8 +542,20 @@
 
 
 
-@media (max-width: 360px) {
-  .rizdvo-products { grid-template-columns: 1fr; }
+@media (max-width: 450px) {
+  .rizdvo-products {
+   display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 100%;
+  }
+  .insert-img img{
+    height: 150px;
+    object-fit: contain;
+  }
+  .insert-text p{
+    font-size: 14px;
+  }
 }
 
 
