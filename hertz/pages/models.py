@@ -2,6 +2,12 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
+import os
+import requests
+from django.db import models
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+
 
 
 class Subscriber(models.Model):
@@ -92,19 +98,35 @@ class OrderItem(models.Model):
         return self.quantity * self.price
 
 
+
+def _send_brevo_email(to_email, subject, message):
+    try:
+        requests.post(
+            'https://api.brevo.com/v3/smtp/email',
+            headers={
+                'api-key': os.environ.get('BREVO_API_KEY', ''),
+                'Content-Type': 'application/json',
+            },
+            json={
+                'sender': {'name': 'Герць', 'email': 'ab9292001@smtp-brevo.com'},
+                'to': [{'email': to_email}],
+                'subject': subject,
+                'textContent': message,
+            },
+            timeout=5,
+        )
+    except Exception:
+        pass
+
+
 @receiver(post_save, sender=Order)
 def send_new_order_email(sender, instance, created, **kwargs):
     if created and instance.email:
-        try:
-            send_mail(
-                subject=f'Замовлення #{instance.id} — оформлено',
-                message=f'Вітаємо, {instance.name}!\n\nВаше замовлення #{instance.id} успішно оформлено.\nСума: {instance.total_price} грн\n\nГарного дня, команда Герць',
-                from_email=None,
-                recipient_list=[instance.email],
-                fail_silently=True,
-            )
-        except BaseException:
-            pass
+        _send_brevo_email(
+            instance.email,
+            f'Замовлення #{instance.id} — оформлено',
+            f'Вітаємо, {instance.name}!\n\nВаше замовлення #{instance.id} успішно оформлено.\nСума: {instance.total_price} грн\n\nГарного дня, команда Герць',
+        )
 
 
 @receiver(pre_save, sender=Order)
@@ -134,27 +156,17 @@ def send_status_change_email(sender, instance, **kwargs):
     if old.payment_status != instance.payment_status:
         msg = payment_messages.get(instance.payment_status)
         if msg:
-            try:
-                send_mail(
-                    subject=f'Замовлення #{instance.id} — статус оплати',
-                    message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
-                    from_email=None,
-                    recipient_list=[instance.email],
-                    fail_silently=True,
-                )
-            except BaseException:
-                pass
+            _send_brevo_email(
+                instance.email,
+                f'Замовлення #{instance.id} — статус оплати',
+                f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
+            )
 
     if old.order_status != instance.order_status:
         msg = order_messages.get(instance.order_status)
         if msg:
-            try:
-                send_mail(
-                    subject=f'Замовлення #{instance.id} — статус замовлення',
-                    message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
-                    from_email=None,
-                    recipient_list=[instance.email],
-                    fail_silently=True,
-                )
-            except BaseException:
-                pass
+            _send_brevo_email(
+                instance.email,
+                f'Замовлення #{instance.id} — статус замовлення',
+                f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
+            )
