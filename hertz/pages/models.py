@@ -108,7 +108,7 @@ def _send_brevo_email(to_email, subject, message):
                 'Content-Type': 'application/json',
             },
             json={
-                'sender': {'name': 'Герць', 'email': 'ab9292001@smtp-brevo.com'},
+                'sender': {'name': 'Герць', 'email': 'chepursofia27@gmail.com'},
                 'to': [{'email': to_email}],
                 'subject': subject,
                 'textContent': message,
