@@ -103,7 +103,7 @@ def send_new_order_email(sender, instance, created, **kwargs):
                 recipient_list=[instance.email],
                 fail_silently=True,
             )
-        except Exception:
+        except BaseException:
             pass
 
 
