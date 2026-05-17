@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,13 +26,15 @@ LIQPAY_PUBLIC_KEY  = 'sandbox_i46947698415'
 LIQPAY_PRIVATE_KEY = 'sandbox_0HHrHOFXUafmKOJAseJTchYqHqfbQzL4uCCJpn87'
 
 # Gmail
-EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          = 587
 EMAIL_USE_TLS       = True
 EMAIL_HOST_USER     = 'chepursofia27@gmail.com'
 EMAIL_HOST_PASSWORD = 'tyle yivt yvtc blzq'  # не звичайний пароль!
 DEFAULT_FROM_EMAIL  = 'Герць <hertz@gmail.com>'
+
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
