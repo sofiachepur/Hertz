@@ -95,13 +95,16 @@ class OrderItem(models.Model):
 @receiver(post_save, sender=Order)
 def send_new_order_email(sender, instance, created, **kwargs):
     if created and instance.email:
-        send_mail(
-            subject=f'Замовлення #{instance.id} — оформлено',
-            message=f'Вітаємо, {instance.name}!\n\nВаше замовлення #{instance.id} успішно оформлено.\nСума: {instance.total_price} грн\n\nГарного дня, команда Герць',
-            from_email=None,
-            recipient_list=[instance.email],
-            fail_silently=True,
-        )
+        try:
+            send_mail(
+                subject=f'Замовлення #{instance.id} — оформлено',
+                message=f'Вітаємо, {instance.name}!\n\nВаше замовлення #{instance.id} успішно оформлено.\nСума: {instance.total_price} грн\n\nГарного дня, команда Герць',
+                from_email=None,
+                recipient_list=[instance.email],
+                fail_silently=True,
+            )
+        except Exception:
+            pass
 
 
 @receiver(pre_save, sender=Order)
@@ -131,21 +134,27 @@ def send_status_change_email(sender, instance, **kwargs):
     if old.payment_status != instance.payment_status:
         msg = payment_messages.get(instance.payment_status)
         if msg:
-            send_mail(
-                subject=f'Замовлення #{instance.id} — статус оплати',
-                message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
-                from_email=None,
-                recipient_list=[instance.email],
-                fail_silently=True,
-            )
+            try:
+                send_mail(
+                    subject=f'Замовлення #{instance.id} — статус оплати',
+                    message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
+                    from_email=None,
+                    recipient_list=[instance.email],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
 
     if old.order_status != instance.order_status:
         msg = order_messages.get(instance.order_status)
         if msg:
-            send_mail(
-                subject=f'Замовлення #{instance.id} — статус замовлення',
-                message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
-                from_email=None,
-                recipient_list=[instance.email],
-                fail_silently=True,
-            )
+            try:
+                send_mail(
+                    subject=f'Замовлення #{instance.id} — статус замовлення',
+                    message=f'Вітаємо, {instance.name}!\n\n{msg}\n\nГарного дня, команда Герць',
+                    from_email=None,
+                    recipient_list=[instance.email],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
