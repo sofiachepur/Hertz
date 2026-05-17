@@ -142,7 +142,7 @@ def send_status_change_email(sender, instance, **kwargs):
                     recipient_list=[instance.email],
                     fail_silently=True,
                 )
-            except Exception:
+            except BaseException:
                 pass
 
     if old.order_status != instance.order_status:
@@ -156,5 +156,5 @@ def send_status_change_email(sender, instance, **kwargs):
                     recipient_list=[instance.email],
                     fail_silently=True,
                 )
-            except Exception:
+            except BaseException:
                 pass
