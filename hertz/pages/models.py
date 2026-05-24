@@ -1,7 +1,4 @@
-from django.db import models
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
-from django.core.mail import send_mail
+
 import os
 import requests
 from django.db import models
