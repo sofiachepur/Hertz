@@ -1,10 +1,9 @@
-
 import os
 import requests
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-
+from cloudinary.models import CloudinaryField
 
 
 class Subscriber(models.Model):
@@ -20,11 +19,14 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
 class ProductType(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
@@ -32,14 +34,13 @@ class Product(models.Model):
     description = models.TextField()
     characteristics = models.TextField()
     care = models.TextField()
-    image1 = models.ImageField(upload_to='products/')
-    image2 = models.ImageField(upload_to='products/', blank=True, null=True)
-    image3 = models.ImageField(upload_to='products/', blank=True, null=True)
-    image4 = models.ImageField(upload_to='products/', blank=True, null=True)
-    image5 = models.ImageField(upload_to='products/', blank=True, null=True)
+    image1 = CloudinaryField('image')
+    image2 = CloudinaryField('image', blank=True, null=True)
+    image3 = CloudinaryField('image', blank=True, null=True)
+    image4 = CloudinaryField('image', blank=True, null=True)
+    image5 = CloudinaryField('image', blank=True, null=True)
     quantity = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
     product_type = models.ForeignKey(
         ProductType,
         on_delete=models.SET_NULL,
@@ -65,13 +66,13 @@ class Order(models.Model):
         ('received', 'Отримано'),
     ]
 
-    name           = models.CharField(max_length=100)
-    phone          = models.CharField(max_length=30)
-    address        = models.TextField()
-    receiver_name  = models.CharField(max_length=100, blank=True, null=True)
-    receiver_phone = models.CharField(max_length=30,  blank=True, null=True)
-    email          = models.EmailField(blank=True, null=True)
-    comment        = models.TextField(blank=True, null=True)
+    name            = models.CharField(max_length=100)
+    phone           = models.CharField(max_length=30)
+    address         = models.TextField()
+    receiver_name   = models.CharField(max_length=100, blank=True, null=True)
+    receiver_phone  = models.CharField(max_length=30,  blank=True, null=True)
+    email           = models.EmailField(blank=True, null=True)
+    comment         = models.TextField(blank=True, null=True)
     delivery_method = models.CharField(max_length=100, blank=True, null=True)
     delivery_city   = models.CharField(max_length=100, blank=True, null=True)
     delivery_branch = models.CharField(max_length=200, blank=True, null=True)
@@ -93,7 +94,6 @@ class OrderItem(models.Model):
 
     def total(self):
         return self.quantity * self.price
-
 
 
 def _send_brevo_email(to_email, subject, message):
