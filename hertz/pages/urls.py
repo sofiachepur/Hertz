@@ -9,7 +9,7 @@ urlpatterns = [
     path('velykden/', views.velykden, name='velykden'),
     path('pobut/', views.pobut, name='pobut'),
     path('subscribe/', views.emailSub, name='subscribe'),
-    path('products/', views.products, name='products'),
+    path('products/', views.products_view, name='products'),
         path(
             'cart/add/<int:product_id>/',
             views.add_to_cart,
