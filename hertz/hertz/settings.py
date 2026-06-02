@@ -1,6 +1,4 @@
 import os
-import cloudinary
-import cloudinary.uploader
 import cloudinary.api
 from pathlib import Path
 
@@ -66,7 +64,9 @@ WSGI_APPLICATION = 'hertz.wsgi.application'
 
 import dj_database_url
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    'default': dj_database_url.parse(
+        "postgresql://neondb_owner:PASS@HOST/neondb?sslmode=require"
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -90,7 +90,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 CSRF_TRUSTED_ORIGINS = ['https://hertz-zkgb.onrender.com']
 
-# Cloudinary
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),

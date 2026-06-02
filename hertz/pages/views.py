@@ -10,7 +10,6 @@ def rizdvo(request):
 
     product_type = request.GET.get('type')
 
-    # базова вибірка товарів цієї сторінки
     products = Product.objects.filter(category__name="Різдво")
 
     # фільтр по типу
@@ -18,7 +17,6 @@ def rizdvo(request):
         products = products.filter(product_type_id=product_type)
 
 
-    # ⬇️ ОЦЕ ГОЛОВНЕ ВИПРАВЛЕННЯ
     types = ProductType.objects.filter(product__category__name="Різдво").distinct()
 
     products = apply_sorting(products, request)
@@ -129,7 +127,7 @@ def add_to_cart(request, product_id):
 
     current_quantity = cart.get(product_id, 0)
 
-    # перевірка залишку товару
+
     if current_quantity < product.quantity:
         cart[product_id] = current_quantity + 1
 
@@ -372,7 +370,6 @@ def cart(request):
             total                += product.total_price
             products.append(product)
         except Product.DoesNotExist:
-            # товар видалено з БД — прибираємо з сесії
             del cart_data[product_id]
             request.session['cart'] = cart_data
             request.session.modified = True
@@ -532,7 +529,7 @@ def apply_sorting(products, request):
         return products.order_by('-price')
 
     if sort == 'best':
-        return products.order_by('-quantity')  # умовні "лідери продажів"
+        return products.order_by('-quantity')
 
     return products
 
