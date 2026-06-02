@@ -64,9 +64,14 @@ WSGI_APPLICATION = 'hertz.wsgi.application'
 
 import dj_database_url
 DATABASES = {
-    'default': dj_database_url.parse(
-        "postgresql://neondb_owner:PASS@HOST/neondb?sslmode=require"
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'neondb',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'your_real_password',
+        'HOST': 'ep-green-rice-aqgfb9te-pooler.c-8.us-east-1.aws.neon.tech',
+        'PORT': '5432',
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
